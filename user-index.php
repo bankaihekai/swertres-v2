@@ -129,7 +129,7 @@ if (isset($_POST['submit'])) {
                             <div class="table-responsive overflow-auto" id="table-container">
                                 <table class="table table-bordered">
                                     <tr>
-                                        <th colspan="2" class="text-center">
+                                        <th colspan="2" class="text-center table-dark">
                                             Total Amount
                                         </th>
                                     </tr>
@@ -143,6 +143,11 @@ if (isset($_POST['submit'])) {
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <th class="text-center table-dark">Swertres</th>
+                                        <th class="text-center table-dark">Amount</th>
+                                    </tr>
+                                    
                                 </table>
                             </div>
                         </div>

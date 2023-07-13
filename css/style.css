@@ -1,6 +1,7 @@
 .main-link.nav-link.active {
   /* color: #0d6efd !important; */
   background-color: black;
+  font-weight: bold;
   color: white;
 }
 
