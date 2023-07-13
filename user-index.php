@@ -3,9 +3,82 @@
 include("dbhelper.php");
 session_start();
 
-if(!isset($_SESSION['id'])){
+date_default_timezone_set('Asia/Manila');
+
+$current_date = date("Y-n-j");
+$current_time = date("h:i A");
+
+if (!isset($_SESSION['id'])) {
     header("Location: login.php");
 }
+
+if (isset($_POST['submit'])) {
+
+    $swertres_number = $_POST['swertres-number'];
+    $straight_amount = null;
+    $ramble_amount = null;
+    $straight_type = "straight";
+    $ramble_type = "ramble";
+
+    if (isset($_POST['straight-amount'])) {
+        $straight_amount = $_POST['straight-amount'];
+    }
+
+    if (isset($_POST['ramble-amount'])) {
+        $ramble_amount = $_POST['ramble-amount'];
+    }
+
+    if ($straight_amount != null && $ramble_amount != null) {
+
+        $sql_straight = "INSERT INTO `transaction`
+                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
+                        VALUES
+                        ('$swertres_number','$straight_type','$straight_amount','$current_time','$current_date','pending')";
+
+        $sql_ramble = "INSERT INTO `transaction`
+                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
+                        VALUES
+                        ('$swertres_number','$ramble_type','$ramble_amount','$current_time','$current_date','pending')";
+
+        $query_straight = mysqli_query(connect(), $sql_straight);
+        $query_ramble = mysqli_query(connect(), $sql_ramble);
+
+        if ($query_straight && $query_ramble) {
+            $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
+        } else {
+            $_SESSION['error-message'] = "MYSQL Error!";
+        }
+    } else if ($straight_amount == null && $ramble_amount != null) {
+        $sql_ramble = "INSERT INTO `transaction`
+                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
+                        VALUES
+                        ('$swertres_number','$ramble_type','$ramble_amount','$current_time','$current_date','pending')";
+
+        $query_ramble = mysqli_query(connect(), $sql_ramble);
+
+        if ($query_ramble) {
+            $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
+        } else {
+            $_SESSION['error-message'] = "MYSQL Error!";
+        }
+    } else if ($straight_amount != null && $ramble_amount == null) {
+        $sql_straight = "INSERT INTO `transaction`
+                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
+                        VALUES
+                        ('$swertres_number','$straight_type','$straight_amount','$current_time','$current_date','pending')";
+
+        $query_straight = mysqli_query(connect(), $sql_straight);
+
+        if ($query_straight) {
+            $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
+        } else {
+            $_SESSION['error-message'] = "MYSQL Error!";
+        }
+    } else {
+        $_SESSION['error-message'] = "Must input a straight/ramble amount!";
+    }
+}
+
 
 ?>
 
@@ -41,6 +114,20 @@ if(!isset($_SESSION['id'])){
                 <div id="time" class="fw-bold text-center"></div>
                 <div class="pt-5">
                     <form method="post" id="swertres-form">
+                        <div>
+                            <?php
+                            if (isset($_SESSION['error-message'])) {
+                                $message = $_SESSION['error-message'];
+                                unset($_SESSION['error-message']);
+                                echo "<h6 class='alert alert-danger text-center'>$message</h6>";
+                            }
+                            if (isset($_SESSION['success-message'])) {
+                                $message = $_SESSION['success-message'];
+                                unset($_SESSION['success-message']);
+                                echo "<h6 class='alert alert-success text-center'>$message</h6>";
+                            }
+                            ?>
+                        </div>
                         <div class="mb-3">
                             <label for="swertres-number" class="form-label">Swertres Number</label>
                             <input type="text" class="form-control" id="swertres-number" name="swertres-number" maxlength="3" pattern="[0-9]{3}" placeholder="000-999" required>
@@ -54,7 +141,7 @@ if(!isset($_SESSION['id'])){
                             <input type="text" class="form-control" id="ramble-amount" name="ramble-amount" placeholder="&#8369; 0.00">
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -112,55 +199,11 @@ if(!isset($_SESSION['id'])){
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
                                 </table>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="ex-with-icons-tabs-2" role="tabpanel" aria-labelledby="ex-with-icons-tab-2">
-                        <div class="table-responsive overflow-auto" id="table-container">
+                            <div class="table-responsive overflow-auto" id="table-container">
                                 <table class="table table-bordered">
                                     <tr>
                                         <th colspan="2" class="text-center">
@@ -176,56 +219,12 @@ if(!isset($_SESSION['id'])){
                                                 </div>
                                             </div>
                                         </td>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
                                     </tr>
                                 </table>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="ex-with-icons-tabs-3" role="tabpanel" aria-labelledby="ex-with-icons-tab-3">
-                        <div class="table-responsive overflow-auto" id="table-container">
+                            <div class="table-responsive overflow-auto" id="table-container">
                                 <table class="table table-bordered">
                                     <tr>
                                         <th colspan="2" class="text-center">
@@ -241,50 +240,6 @@ if(!isset($_SESSION['id'])){
                                                 </div>
                                             </div>
                                         </td>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="text-center">
-                                        <th>Swertres</th>
-                                        <th>Amount</th>
                                     </tr>
                                 </table>
                             </div>
@@ -330,24 +285,6 @@ if(!isset($_SESSION['id'])){
 
         <div class="bg-dark h-50">
             <!-- this is the background dont touch this -->
-        </div>
-    </div>
-
-    <!-- Success Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered checkmark-modal" role="document">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <div class="checkmark-circle">
-                        <div class="checkmark-check">
-                            <i class="fa fa-check fa-4x text-success"></i>
-                        </div>
-                    </div>
-                    <h6 class="modal-title" id="successModalLabel">Swertres Number Successfully Submitted!</h6>
-                    <br>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
         </div>
     </div>
 

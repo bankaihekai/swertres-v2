@@ -15,15 +15,31 @@ function showInputSwertresContent() {
 // Show the input-swertres-content by default
 showInputSwertresContent();
 
-$(document).ready(function () {
-  $("#swertres-form").submit(function (e) {
-    e.preventDefault();
-    // Submit logic goes here
+function submit_error() {
+  $(document).ready(function () {
+    $("#swertres-form").submit(function (e) {
+      e.preventDefault();
 
-    // Show the success modal
-    $("#successModal").modal("show");
+      var straightAmount = $("input[name='straight-amount']").val();
+      var rambleAmount = $("input[name='ramble-amount']").val();
+
+      if (straightAmount === "" && rambleAmount === "") {
+        // Show the error modal
+        $("#errorModal").modal("show");
+      }
+    });
   });
-});
+}
+
+function submit_success() {
+  $(document).ready(function () {
+    $("#swertres-form").submit(function (e) {
+      e.preventDefault();
+
+      $("#successModal").modal("show");
+    });
+  });
+}
 
 // function adjustTableHeight() {
 //   var overlayHeight = $(".overlay-content").height();

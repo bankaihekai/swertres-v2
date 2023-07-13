@@ -1,7 +1,4 @@
 <?php
-
-date_default_timezone_set('Asia/Manila');
-$date_today = date("F j, Y");
 function connect()
 {
     global $conn;
@@ -52,24 +49,3 @@ function userLogin($user_email, $user_pass)
     exit();
 }
 
-// function getalluser(){
-//     global $conn, $table;
-//     connect();
-//     $query = mysqli_query($conn, "SELECT * FROM `$table`");
-//     $getrecord = mysqli_fetch_all($query);
-//     disconnect();
-//     return $getrecord;
-// }
-
-// function getrecord($username, $password){
-//     global $conn, $table;
-//     $sql = "SELECT * FROM `$table` WHERE `uname`='$username' and `pword`='$password'";
-//     connect();
-//     $query = mysqli_query($conn, $sql);
-//     $rows = mysqli_fetch_all($query);
-//     disconnect();
-//     if(count($rows) > 0)
-//         return $rows[0];
-//     else
-//         return false;
-// }
