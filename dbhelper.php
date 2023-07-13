@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Manila');
 function connect()
 {
     global $conn;
@@ -25,7 +26,7 @@ function adminLogin($admin_email, $admin_pass)
     } else {
         $message = "Incorrect username or password!";
     }
-    
+
     $_SESSION['message'] = $message;
     header("Location: adminlogin.php");
     exit();
@@ -43,9 +44,70 @@ function userLogin($user_email, $user_pass)
     } else {
         $message = "Incorrect username or password!";
     }
-    
+
     $_SESSION['message'] = $message;
     header("Location: login.php");
     exit();
 }
 
+function inputSwertres($swertres_number, $straight_amount, $ramble_amount)
+{
+
+    $current_date = date("Y-n-j");
+    $current_time = date("h:i A");
+
+    $straight_type = "straight";
+    $ramble_type = "ramble";
+
+    if ($straight_amount != null && $ramble_amount != null) {
+
+        $sql_straight = "INSERT INTO `transaction`
+                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
+                        VALUES
+                        ('$swertres_number','$straight_type','$straight_amount','$current_time','$current_date','pending')";
+
+        $sql_ramble = "INSERT INTO `transaction`
+                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
+                        VALUES
+                        ('$swertres_number','$ramble_type','$ramble_amount','$current_time','$current_date','pending')";
+
+        $query_straight = mysqli_query(connect(), $sql_straight);
+        $query_ramble = mysqli_query(connect(), $sql_ramble);
+
+        if ($query_straight && $query_ramble) {
+            $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
+        } else {
+            $_SESSION['error-message'] = "MYSQL Error!";
+        }
+    } else if ($straight_amount == null && $ramble_amount != null) {
+        $sql_ramble = "INSERT INTO `transaction`
+                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
+                        VALUES
+                        ('$swertres_number','$ramble_type','$ramble_amount','$current_time','$current_date','pending')";
+
+        $query_ramble = mysqli_query(connect(), $sql_ramble);
+
+        if ($query_ramble) {
+            $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
+        } else {
+            $_SESSION['error-message'] = "MYSQL Error!";
+        }
+    } else if ($straight_amount != null && $ramble_amount == null) {
+        $sql_straight = "INSERT INTO `transaction`
+                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
+                        VALUES
+                        ('$swertres_number','$straight_type','$straight_amount','$current_time','$current_date','pending')";
+
+        $query_straight = mysqli_query(connect(), $sql_straight);
+
+        if ($query_straight) {
+            $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
+        } else {
+            $_SESSION['error-message'] = "MYSQL Error!";
+        }
+    } else {
+        $_SESSION['error-message'] = "Must input a straight/ramble amount!";
+    }
+    header("Location: user-index.php");
+    exit();
+}
