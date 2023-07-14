@@ -8,8 +8,8 @@
     $page = $_GET['page'];
 
     if($page == 'admin'){
-        header("Location: adminlogin.php");
+        header("Location: ../adminlogin.php");
     }else{
-        header("Location: login.php");
+        header("Location: ../login.php");
     }
     exit();

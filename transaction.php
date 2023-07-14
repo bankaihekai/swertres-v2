@@ -1,5 +1,5 @@
 <?php
-include("dbhelper.php");
+include("db/dbhelper.php");
 session_start();
 
 if (!isset($_SESSION['id'])) {
@@ -24,7 +24,7 @@ if (isset($_POST['hidden-date'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="shortcut icon" href="../img/logo.png" />
+    <link rel="shortcut icon" href="img/logo.png" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -57,8 +57,8 @@ if (isset($_POST['hidden-date'])) {
                         </form>
                     </div>
                     <div class="w-50">
-                        <div class="d-flex align-items-center">
-                            &#8369;&nbsp;<input type="text" name="total-amount" class="border-0 form-control bg-transparent" disabled value="0.00">
+                        <div class="d-flex align-items-center h-100">
+                            <span>&#8369;&nbsp;</span><b id="transaction-date-total">asd</b>
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,7 @@ if (isset($_POST['hidden-date'])) {
                                                 <div class="text-center">
                                                     <div class="d-flex justify-content-center align-items-center">
                                                         <span>&#8369;&nbsp;</span>
-                                                        <span id="transaction-total-2pm"></span>
+                                                        <b id="transaction-total-2pm"></b>
                                                     </div>
                                                 </div>
                                             </td>
@@ -108,14 +108,71 @@ if (isset($_POST['hidden-date'])) {
                                     <tbody id="transaction-table-body-2pm">
                                         <!-- Transaction data will be dynamically inserted here -->
                                     </tbody>
+                                    <tfoot></tfoot>
                                 </table>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="ex-with-icons-tabs-2" role="tabpanel" aria-labelledby="ex-with-icons-tab-2">
-                            5 pm
+                            <div class="table-responsive overflow-auto" id="table-container">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2" class="text-center table-dark">
+                                                Total Amount
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <div class="text-center">
+                                                    <div class="d-flex justify-content-center align-items-center">
+                                                        <span>&#8369;&nbsp;</span>
+                                                        <b id="transaction-total-5pm"></b>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center table-dark">Swertres</th>
+                                            <th class="text-center table-dark">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transaction-table-body-5pm">
+                                        <!-- Transaction data will be dynamically inserted here -->
+                                    </tbody>
+                                    <tfoot></tfoot>
+                                </table>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="ex-with-icons-tabs-3" role="tabpanel" aria-labelledby="ex-with-icons-tab-3">
-                            9 PM
+                            <div class="table-responsive overflow-auto" id="table-container">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2" class="text-center table-dark">
+                                                Total Amount
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <div class="text-center">
+                                                    <div class="d-flex justify-content-center align-items-center">
+                                                        <span>&#8369;&nbsp;</span>
+                                                        <b id="transaction-total-9pm"></b>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center table-dark">Swertres</th>
+                                            <th class="text-center table-dark">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transaction-table-body-9pm">
+                                        <!-- Transaction data will be dynamically inserted here -->
+                                    </tbody>
+                                    <tfoot></tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <!-- Tabs content -->
@@ -143,7 +200,7 @@ if (isset($_POST['hidden-date'])) {
                                     </li>
                                     <div class="dropdown-divider"></div>
                                     <li>
-                                        <a class="dropdown-item" href="logout.php?page=user"><i class="fa fa-sign-out"></i> Logout</a>
+                                        <a class="dropdown-item" href="db/logout.php?page=user"><i class="fa fa-sign-out"></i> Logout</a>
                                     </li>
                                 </ul>
                             </li>

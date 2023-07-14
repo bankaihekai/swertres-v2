@@ -18,7 +18,7 @@ function two_pm_draw() {
 
           $.ajax({
               type: "POST",
-              url: "update_session_date.php", // PHP script to update the session date
+              url: "db/update_session_date.php", // PHP script to update the session date
               data: {
                   date: newDate
               },
@@ -27,17 +27,22 @@ function two_pm_draw() {
                   $("#session-date").text(response);
 
                   // Fetch and display transaction data using AJAX
-                  fetchTransactionData();
-                  fetchTransactionTotal();
+                  ft_data_2pm();
+                  ft_trans_total_2pm();
+                  ft_data_5pm();
+                  ft_trans_total_5pm();
+                  ft_data_9pm();
+                  ft_trans_total_9pm();
+                  ft_date_total();
               }
           });
       }
 
-      // Function to fetch and display transaction data using AJAX
-      function fetchTransactionData() {
+      // 2PM transaction ------------------
+      function ft_data_2pm() {
           $.ajax({
               type: "GET",
-              url: "fetch_transaction_data.php", // PHP script to fetch transaction data
+              url: "db/ft-data-2pm.php", // PHP script to fetch transaction data
               success: function(response) {
                   // Update the transaction table with the fetched data
                   $("#transaction-table-body-2pm").html(response);
@@ -45,11 +50,10 @@ function two_pm_draw() {
           });
       }
 
-      // Function to fetch and display transaction total using AJAX
-      function fetchTransactionTotal() {
+      function ft_trans_total_2pm() {
           $.ajax({
               type: "GET",
-              url: "fetch_transaction_total.php", // PHP script to fetch transaction total
+              url: "db/ft-total-2pm.php", // PHP script to fetch transaction total
               success: function(response) {
                   // Update the transaction total
                   $("#transaction-total-2pm").text(response);
@@ -57,9 +61,71 @@ function two_pm_draw() {
           });
       }
 
+      // 5PM transaction ------------------
+      function ft_data_5pm() {
+        $.ajax({
+            type: "GET",
+            url: "db/ft-data-5pm.php", // PHP script to fetch transaction data
+            success: function(response) {
+                // Update the transaction table with the fetched data
+                $("#transaction-table-body-5pm").html(response);
+            }
+        });
+    }
+
+    function ft_trans_total_5pm() {
+        $.ajax({
+            type: "GET",
+            url: "db/ft-total-5pm.php", // PHP script to fetch transaction total
+            success: function(response) {
+                // Update the transaction total
+                $("#transaction-total-5pm").text(response);
+            }
+        });
+    }
+
+    // 5PM transaction ------------------
+    function ft_data_9pm() {
+        $.ajax({
+            type: "GET",
+            url: "db/ft-data-9pm.php", // PHP script to fetch transaction data
+            success: function(response) {
+                // Update the transaction table with the fetched data
+                $("#transaction-table-body-9pm").html(response);
+            }
+        });
+    }
+
+    function ft_trans_total_9pm() {
+        $.ajax({
+            type: "GET",
+            url: "db/ft-total-9pm.php", // PHP script to fetch transaction total
+            success: function(response) {
+                // Update the transaction total
+                $("#transaction-total-9pm").text(response);
+            }
+        });
+    }
+
+      function ft_date_total() {
+        $.ajax({
+            type: "GET",
+            url: "db/ft-date-total.php", // PHP script to fetch transaction total
+            success: function(response) {
+                // Update the transaction total
+                $("#transaction-date-total").text(response);
+            }
+        });
+    }
+
       // Initial fetch and display of transaction data and total
-      fetchTransactionData();
-      fetchTransactionTotal();
+      ft_data_2pm();
+      ft_trans_total_2pm();
+      ft_data_5pm();
+      ft_trans_total_5pm();
+      ft_data_9pm();
+      ft_trans_total_9pm();
+      ft_date_total();
   });
 }
 

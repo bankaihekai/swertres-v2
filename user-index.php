@@ -1,6 +1,6 @@
 <?php
 
-include("dbhelper.php");
+include("db/dbhelper.php");
 session_start();
 
 if (!isset($_SESSION['id'])) {
@@ -34,7 +34,7 @@ if (isset($_POST['submit'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="shortcut icon" href="../img/logo.png" />
+    <link rel="shortcut icon" href="img/logo.png" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -112,7 +112,7 @@ if (isset($_POST['submit'])) {
                                     </li>
                                     <div class="dropdown-divider"></div>
                                     <li>
-                                        <a class="dropdown-item" href="logout.php?page=user"><i class="fa fa-sign-out"></i> Logout</a>
+                                        <a class="dropdown-item" href="db/logout.php?page=user"><i class="fa fa-sign-out"></i> Logout</a>
                                     </li>
                                 </ul>
                             </li>
