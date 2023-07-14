@@ -3,7 +3,7 @@
 include("dbhelper.php");
 session_start();
 
-if(isset($_SESSION['id'])){
+if(isset($_SESSION['admin-id'])){
     header("Location: admin-index.php");
     exit();
 }

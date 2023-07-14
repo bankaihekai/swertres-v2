@@ -1,6 +1,8 @@
 <?php
 date_default_timezone_set('Asia/Manila');
-$date_today = date("m/j/Y");
+$date_today2 = date("Y-m-j"); // for date picker format
+$date_today = date("F j, Y");
+
 function connect()
 {
     global $conn;
@@ -21,7 +23,7 @@ function adminLogin($admin_email, $admin_pass)
 
     if (mysqli_num_rows($sql_query) > 0) {
         $row = mysqli_fetch_assoc($sql_query);
-        $_SESSION['id'] = $row['admin_id'];
+        $_SESSION['admin-id'] = $row['admin_id'];
         header("Location: admin-index.php");
         exit();
     } else {

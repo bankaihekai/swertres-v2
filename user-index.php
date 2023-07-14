@@ -90,113 +90,6 @@ if (isset($_POST['submit'])) {
                     </form>
                 </div>
             </div>
-            <div class="payout-analysis-content">
-                <div class="d-flex justify-content-between">
-                    <div id="payout-time" class="fw-bold d-flex align-items-center">
-                        <div id="payout-time" class="fw-bold d-flex align-items-center">
-                            <input type="text" id="datepicker" class="form-control fw-bold border-0" value="<?php echo $date_today; ?>">
-                        </div>
-                    </div>
-                    <div class="w-50">
-                        <div class="d-flex align-items-center">
-                            &#8369;&nbsp;<input type="text" name="total-amount" class="border-0 form-control bg-transparent" disabled value="0.00">
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <!-- Add content for payout analysis here -->
-                <div class="">
-                    <!-- Tabs navs -->
-                    <ul class="nav nav-tabs mb-3 d-flex justify-content-between" id="ex-with-icons" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="main-link nav-link active" id="ex-with-icons-tab-1" data-bs-toggle="pill" href="#ex-with-icons-tabs-1" role="tab" aria-controls="ex-with-icons-tabs-1" aria-selected="true"></i>2PM
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="main-link nav-link" id="ex-with-icons-tab-2" data-bs-toggle="pill" href="#ex-with-icons-tabs-2" role="tab" aria-controls="ex-with-icons-tabs-2" aria-selected="false"></i>5PM
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="main-link nav-link" id="ex-with-icons-tab-3" data-bs-toggle="pill" href="#ex-with-icons-tabs-3" role="tab" aria-controls="ex-with-icons-tabs-3" aria-selected="false"></i>9PM
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- Tabs navs -->
-
-                    <!-- Tabs content -->
-                    <div class="tab-content" id="ex-with-icons-content">
-                        <div class="tab-pane fade show active" id="ex-with-icons-tabs-1" role="tabpanel" aria-labelledby="ex-with-icons-tab-1">
-                            <div class="table-responsive overflow-auto" id="table-container">
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <th colspan="2" class="text-center table-dark">
-                                            Total Amount
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <div class="text-center">
-                                                <div class="d-flex justify-content-center align-items-center">
-                                                    <span>&#8369;&nbsp;</span>
-                                                    <?php echo "0.00"; ?>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-center table-dark">Swertres</th>
-                                        <th class="text-center table-dark">Amount</th>
-                                    </tr>
-                                    
-                                </table>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="ex-with-icons-tabs-2" role="tabpanel" aria-labelledby="ex-with-icons-tab-2">
-                            <div class="table-responsive overflow-auto" id="table-container">
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <th colspan="2" class="text-center">
-                                            Total Amount
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <div class="text-center">
-                                                <div class="d-flex justify-content-center align-items-center">
-                                                    <span>&#8369;&nbsp;</span>
-                                                    <?php echo "0.00"; ?>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="ex-with-icons-tabs-3" role="tabpanel" aria-labelledby="ex-with-icons-tab-3">
-                            <div class="table-responsive overflow-auto" id="table-container">
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <th colspan="2" class="text-center">
-                                            Total Amount
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <div class="text-center">
-                                                <div class="d-flex justify-content-center align-items-center">
-                                                    <span>&#8369;&nbsp;</span>
-                                                    <?php echo "0.00"; ?>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Tabs content -->
-                </div>
-            </div>
         </div>
     </div>
     <div class="vh-100">
@@ -212,10 +105,10 @@ if (isset($_POST['submit'])) {
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <li>
-                                        <a class="dropdown-item" href="#" onclick="showInputSwertresContent()"><i class="fa fa-pencil"></i> Input Swertres</a>
+                                        <a class="dropdown-item bg-primary text-white" href="user-index.php"><i class="fa fa-pencil"></i> Input Swertres</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#" onclick="showPayoutAnalysisContent()"><i class="fa fa-bar-chart"></i> Payout Analysis</a>
+                                        <a class="dropdown-item" href="transaction.php"><i class="fa fa-bar-chart"></i> Payout Analysis</a>
                                     </li>
                                     <div class="dropdown-divider"></div>
                                     <li>
@@ -238,7 +131,7 @@ if (isset($_POST['submit'])) {
     </div>
 
     <script src="js/main.js"></script>
-    <script src="js/content.js"></script>
+    <!-- <script src="js/content.js"></script> -->
     <script src="js/date.js"></script>
 </body>
 

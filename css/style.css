@@ -9,11 +9,6 @@
   color: grey !important;
 }
 
-.input-swertres-content,
-.payout-analysis-content {
-  display: none;
-}
-
 .dropdown-toggle::after {
   display: none !important;
 }

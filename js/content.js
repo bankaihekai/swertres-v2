@@ -1,55 +1,67 @@
-function showPayoutAnalysisContent() {
-  $(".input-swertres-content").hide();
-  $(".payout-analysis-content").show();
-  // $(".choices").addClass("active");
-  // $(".overlay-content").css("margin-top", "150px");
-}
+function two_pm_draw() {
+  $(function() {
+      // Set the default date in datepicker
+      $("#datepicker").datepicker({
+          dateFormat: "MM d, yy",
+          onSelect: function(dateText, inst) {
+              var formattedDate = $.datepicker.formatDate("yy-m-d", new Date(dateText));
+              $("#hidden-date").val(formattedDate);
 
-function showInputSwertresContent() {
-  $(".input-swertres-content").show();
-  $(".payout-analysis-content").hide();
-  // $(".choices").removeClass("active");
-  // $(".overlay-content").css("margin-top", "");
-}
+              // Update the session date using AJAX
+              updateSessionDate();
+          }
+      });
 
-// Show the input-swertres-content by default
-showInputSwertresContent();
+      // Function to update the session date using AJAX
+      function updateSessionDate() {
+          var newDate = $("#hidden-date").val();
 
-function submit_error() {
-  $(document).ready(function () {
-    $("#swertres-form").submit(function (e) {
-      e.preventDefault();
+          $.ajax({
+              type: "POST",
+              url: "update_session_date.php", // PHP script to update the session date
+              data: {
+                  date: newDate
+              },
+              success: function(response) {
+                  // Update the displayed date in the table
+                  $("#session-date").text(response);
 
-      var straightAmount = $("input[name='straight-amount']").val();
-      var rambleAmount = $("input[name='ramble-amount']").val();
-
-      if (straightAmount === "" && rambleAmount === "") {
-        // Show the error modal
-        $("#errorModal").modal("show");
+                  // Fetch and display transaction data using AJAX
+                  fetchTransactionData();
+                  fetchTransactionTotal();
+              }
+          });
       }
-    });
+
+      // Function to fetch and display transaction data using AJAX
+      function fetchTransactionData() {
+          $.ajax({
+              type: "GET",
+              url: "fetch_transaction_data.php", // PHP script to fetch transaction data
+              success: function(response) {
+                  // Update the transaction table with the fetched data
+                  $("#transaction-table-body-2pm").html(response);
+              }
+          });
+      }
+
+      // Function to fetch and display transaction total using AJAX
+      function fetchTransactionTotal() {
+          $.ajax({
+              type: "GET",
+              url: "fetch_transaction_total.php", // PHP script to fetch transaction total
+              success: function(response) {
+                  // Update the transaction total
+                  $("#transaction-total-2pm").text(response);
+              }
+          });
+      }
+
+      // Initial fetch and display of transaction data and total
+      fetchTransactionData();
+      fetchTransactionTotal();
   });
 }
 
-function submit_success() {
-  $(document).ready(function () {
-    $("#swertres-form").submit(function (e) {
-      e.preventDefault();
-
-      $("#successModal").modal("show");
-    });
-  });
-}
-
-// function adjustTableHeight() {
-//   var overlayHeight = $(".overlay-content").height();
-//   var navbarHeight = $("nav.navbar").outerHeight();
-//   var containerPadding = 20; // Adjust this value if needed
-//   console.log(overlayHeight);
-//   console.log(navbarHeight);
-//   var tableContainerHeight = overlayHeight - navbarHeight - containerPadding ;
-//   $("#table-container").height(tableContainerHeight);
-// }
-
-// $(window).resize(adjustTableHeight); // Call the function when the window is resized
-// adjustTableHeight(); //
+// Call the two_pm_draw function to start the application
+two_pm_draw();
