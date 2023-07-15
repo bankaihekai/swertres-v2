@@ -59,6 +59,10 @@ function inputSwertres($swertres_number, $straight_amount, $ramble_amount)
     $current_date = date("Y-n-j");
     $current_time = date("h:i A");
 
+    if (strtotime($current_time) >= strtotime("21:00:00")) {
+        $current_date = date("Y-n-j", strtotime("+1 day"));
+    }
+
     $straight_type = "straight";
     $ramble_type = "ramble";
 
@@ -153,7 +157,7 @@ function ramble_all_combinations($number) {
         $remainingDigits = substr($number, 0, $i) . substr($number, $i + 1);
 
         if (strlen($remainingDigits) > 1) {
-            $subCombinations = generateCombinations($remainingDigits);
+            $subCombinations = ramble_all_combinations($remainingDigits);
 
             foreach ($subCombinations as $subCombination) {
                 $combinations[] = $firstDigit . $subCombination;
