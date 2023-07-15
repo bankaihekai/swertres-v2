@@ -114,3 +114,56 @@ function inputSwertres($swertres_number, $straight_amount, $ramble_amount)
     header("Location: user-index.php");
     exit();
 }
+
+function r_2digit_same($number){
+    $digit1 = ($number/100)%10 ;
+    $digit2 = ($number/10)%10;
+    $digit3 = $number%10;
+
+    return($digit1 === $digit2 || $digit1 === $digit3 || $digit2 === $digit3);
+}
+
+function r_2digit_data($number){
+    if (strlen($number) === 1) {
+        return [$number];
+    }
+
+    $permutations = [];
+    $length = strlen($number);
+
+    for ($i = 0; $i < $length; $i++) {
+        $char = $number[$i];
+        $remaining = substr($number, 0, $i) . substr($number, $i + 1);
+        $subPermutations = r_2digit_data($remaining);
+
+        foreach ($subPermutations as $subPermutation) {
+            $permutations[] = $char . $subPermutation;
+        }
+    }
+
+    return $permutations;
+}
+
+function ramble_all_combinations($number) {
+    $length = strlen($number);
+    $combinations = [];
+
+    for ($i = 0; $i < $length; $i++) {
+        $firstDigit = $number[$i];
+        $remainingDigits = substr($number, 0, $i) . substr($number, $i + 1);
+
+        if (strlen($remainingDigits) > 1) {
+            $subCombinations = generateCombinations($remainingDigits);
+
+            foreach ($subCombinations as $subCombination) {
+                $combinations[] = $firstDigit . $subCombination;
+            }
+        } else {
+            $combinations[] = $firstDigit . $remainingDigits;
+        }
+    }
+
+    return $combinations;
+}
+
+

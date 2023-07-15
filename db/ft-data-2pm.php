@@ -18,16 +18,55 @@ if (isset($_SESSION['date'])) {
         while ($row = mysqli_fetch_assoc($two_pm_query)) {
             $swertres_no = $row['swertres_no'];
             $amount = $row['amount'];
-            ?>
-            <tr>
-                <td class='text-center'>
-                    <?php echo $swertres_no; ?>
-                </td>
-                <td class='text-center'>
-                    <?php echo $amount; ?>
-                </td>
-            </tr>
-            <?php
+            $type = $row['type'];
+
+            if(strtolower($type) == 'straight'){
+                echo "
+                <tr>
+                    <td class='text-center'>
+                        ".$swertres_no."
+                    </td>
+                    <td class='text-center'>
+                        ".$amount."
+                    </td>
+                </tr>";
+            }else{
+                if(r_2digit_same($swertres_no)){
+
+                    $combinations = array_unique(r_2digit_data($swertres_no));
+                    $count = count($combinations);
+                    $new_amount = number_format($amount/3,2);
+
+                    foreach ($combinations as $combination) {
+                        echo "
+                        <tr>
+                            <td class='text-center'>
+                                ".$combination."
+                            </td>
+                            <td class='text-center'>
+                                ".$new_amount."
+                            </td>
+                        </tr>";
+                    }
+                   
+                }else{
+                    $combinations = r_2digit_data($swertres_no);
+                    $new_amount = number_format($amount/6,2);
+
+                    foreach ($combinations as $combination) {
+                        echo "
+                        <tr>
+                            <td class='text-center'>
+                                ".$combination."
+                            </td>
+                            <td class='text-center'>
+                                ".$new_amount."
+                            </td>
+                        </tr>";
+                    }
+                }
+            }
+            
         }
     } else {
         ?>
