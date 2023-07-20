@@ -78,14 +78,14 @@ if (isset($_POST['submit'])) {
                         </div>
                         <div class="mb-3">
                             <label for="straight-amount" class="form-label">Straight Amount</label>
-                            <input type="text" class="form-control" id="straight-amount" name="straight-amount" placeholder="&#8369; 0.00">
+                            <input type="number" class="form-control" id="straight-amount" name="straight-amount" placeholder="&#8369; 0.00">
                         </div>
                         <div class="mb-3">
                             <label for="ramble-amount" class="form-label">Ramble Amount</label>
-                            <input type="text" class="form-control" id="ramble-amount" name="ramble-amount" placeholder="&#8369; 0.00">
+                            <input type="number" class="form-control" id="ramble-amount" name="ramble-amount" placeholder="&#8369; 0.00">
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" name="submit" class="btn btn-primary" id="submit-btn">Submit</button><!-- onclick='return confirm("Are you sure?")' -->
+                            <button type="submit" name="submit" id="submit-btn" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -143,7 +143,7 @@ if (isset($_POST['submit'])) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <a href="db/logout.php?page=user" class="btn btn-primary">Logout</a>
+                    <a href="db/logout.php" class="btn btn-primary">Logout</a>
                 </div>
             </div>
         </div>

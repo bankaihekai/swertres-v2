@@ -5,11 +5,5 @@
     session_destroy();
     unset($_SESSION["id"]);
 
-    $page = $_GET['page'];
-
-    // if($page == 'admin'){
-    //     header("Location: ../adminlogin.php");
-    // }else{
-        header("Location: ../index.php");
-    // }
+    header("Location: ../index.php");
     exit();

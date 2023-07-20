@@ -1,5 +1,15 @@
-.table-headers {
-  font-size: 12px;
+.message-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.alert-container {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .overlay-content {
