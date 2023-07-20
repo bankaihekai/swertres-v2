@@ -98,11 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <hr>
                 <!-- Add content for payout analysis here -->
                 <?php
-<<<<<<< HEAD
                 if (isset($_SESSION['message'])) {
-=======
-                if ($_SESSION['message'] != null) {
->>>>>>> 04b358d24e7288f7fbbb3c67a075e17905ce6680
                     echo '
                         <div class="alert-container w-75" style="z-index: 99999">
                             <div class="alert alert-success alert-dismissible fade show d-flex justify-content-center align-items-center" role="alert">
