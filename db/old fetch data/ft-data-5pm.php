@@ -70,7 +70,7 @@ if (isset($_SESSION['date'])) {
     } else {
         ?>
         <tr>
-            <td colspan='2'>
+            <td colspan='3'>
                 <h6 class='alert alert-danger text-center'>No Transaction Found!</h6>
             </td>
         </tr>

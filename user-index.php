@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
                             <input type="text" class="form-control" id="ramble-amount" name="ramble-amount" placeholder="&#8369; 0.00">
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" name="submit" class="btn btn-primary" onclick='return confirm("Are you sure?")'>Submit</button>
+                            <button type="submit" name="submit" class="btn btn-primary" id="submit-btn">Submit</button><!-- onclick='return confirm("Are you sure?")' -->
                         </div>
                     </form>
                 </div>

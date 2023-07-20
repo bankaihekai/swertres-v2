@@ -8,8 +8,8 @@ if (isset($_SESSION['date'])) {
                     FROM `transaction`
                     WHERE `date` = '" . $_SESSION['date'] . "'
                         AND (
-                            TIME_FORMAT(`time`, '%h:%i:%s %p') >= '05:00:00 PM'
-                            AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '09:00:00 PM'
+                            TIME_FORMAT(`time`, '%h:%i:%s %p') >= '09:00:00 PM'
+                            OR TIME_FORMAT(`time`, '%h:%i:%s %p') < '02:00:00 PM'
                         )";
 
     $two_pm_query = mysqli_query(connect(), $two_pm_sql);
@@ -19,6 +19,8 @@ if (isset($_SESSION['date'])) {
             $swertres_no = $row['swertres_no'];
             $amount = $row['amount'];
             $type = $row['type'];
+            $r_original_amount = number_format($amount/3,2);
+            $s_original_amount = $row['amount'];
 
             if(strtolower($type) == 'straight'){
                 echo "
@@ -28,6 +30,9 @@ if (isset($_SESSION['date'])) {
                     </td>
                     <td class='text-center'>
                         ".$amount."
+                    </td>
+                    <td class='text-center'>
+                        ".$s_original_amount."
                     </td>
                 </tr>";
             }else{
@@ -46,6 +51,9 @@ if (isset($_SESSION['date'])) {
                             <td class='text-center'>
                                 ".$new_amount."
                             </td>
+                            <td class='text-center'>
+                                ".$r_original_amount."
+                            </td>
                         </tr>";
                     }
                    
@@ -62,15 +70,19 @@ if (isset($_SESSION['date'])) {
                             <td class='text-center'>
                                 ".$new_amount."
                             </td>
+                            <td class='text-center'>
+                                ".$r_original_amount."
+                            </td>
                         </tr>";
                     }
                 }
             }
+            
         }
     } else {
         ?>
         <tr>
-            <td colspan='2'>
+            <td colspan='3'>
                 <h6 class='alert alert-danger text-center'>No Transaction Found!</h6>
             </td>
         </tr>
