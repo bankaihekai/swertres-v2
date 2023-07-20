@@ -7,9 +7,9 @@
 
     $page = $_GET['page'];
 
-    if($page == 'admin'){
-        header("Location: ../adminlogin.php");
-    }else{
-        header("Location: ../login.php");
-    }
+    // if($page == 'admin'){
+    //     header("Location: ../adminlogin.php");
+    // }else{
+        header("Location: ../index.php");
+    // }
     exit();

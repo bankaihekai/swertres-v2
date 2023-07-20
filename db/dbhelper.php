@@ -17,23 +17,23 @@ function disconnect()
     mysqli_close($conn);
 }
 
-function adminLogin($admin_email, $admin_pass)
-{
-    $sql_query = mysqli_query(connect(), "SELECT * FROM `admin` WHERE BINARY `email` = BINARY '$admin_email' AND BINARY `password` = BINARY '$admin_pass' LIMIT 1");
+// function adminLogin($admin_email, $admin_pass)
+// {
+//     $sql_query = mysqli_query(connect(), "SELECT * FROM `admin` WHERE BINARY `email` = BINARY '$admin_email' AND BINARY `password` = BINARY '$admin_pass' LIMIT 1");
 
-    if (mysqli_num_rows($sql_query) > 0) {
-        $row = mysqli_fetch_assoc($sql_query);
-        $_SESSION['admin-id'] = $row['admin_id'];
-        header("Location: admin-index.php");
-        exit();
-    } else {
-        $message = "Incorrect username or password!";
-    }
+//     if (mysqli_num_rows($sql_query) > 0) {
+//         $row = mysqli_fetch_assoc($sql_query);
+//         $_SESSION['admin-id'] = $row['admin_id'];
+//         header("Location: admin-index.php");
+//         exit();
+//     } else {
+//         $message = "Incorrect username or password!";
+//     }
 
-    $_SESSION['message'] = $message;
-    header("Location: adminlogin.php");
-    exit();
-}
+//     $_SESSION['message'] = $message;
+//     header("Location: adminlogin.php");
+//     exit();
+// }
 
 function userLogin($user_email, $user_pass)
 {
@@ -49,7 +49,7 @@ function userLogin($user_email, $user_pass)
     }
 
     $_SESSION['message'] = $message;
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 }
 

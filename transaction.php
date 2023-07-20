@@ -58,7 +58,7 @@ if (isset($_POST['hidden-date'])) {
                     </div>
                     <div class="w-50">
                         <div class="d-flex align-items-center h-100">
-                            <span>&#8369;&nbsp;</span><b id="transaction-date-total">asd</b>
+                            <span>&#8369;&nbsp;</span><b id="transaction-date-total"></b>
                         </div>
                     </div>
                 </div>
@@ -200,7 +200,7 @@ if (isset($_POST['hidden-date'])) {
                                     </li>
                                     <div class="dropdown-divider"></div>
                                     <li>
-                                        <a class="dropdown-item" href="db/logout.php?page=user"><i class="fa fa-sign-out"></i> Logout</a>
+                                        <a class="dropdown-item" href="db/logout.php?page=user" data-bs-toggle="modal" data-bs-target="#logoutModal"><i class="fa fa-sign-out"></i> Logout</a>
                                     </li>
                                 </ul>
                             </li>
@@ -215,6 +215,25 @@ if (isset($_POST['hidden-date'])) {
 
         <div class="bg-dark h-50">
             <!-- this is the background dont touch this -->
+        </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Logout Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                    <a href="db/logout.php?page=user" class="btn btn-primary">Logout</a>
+                </div>
+            </div>
         </div>
     </div>
 
