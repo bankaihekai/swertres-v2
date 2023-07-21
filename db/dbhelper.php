@@ -262,3 +262,12 @@ function ramble_all_combinations($number)
 
     return $combinations;
 }
+
+function deduction(){
+    $deduct_query = mysqli_query(connect(),"SELECT * FROM `deduction` LIMIT 1");
+
+    if(mysqli_num_rows($deduct_query)>0){
+        $row = mysqli_fetch_assoc($deduct_query);
+        $_SESSION['deduction'] = $row['amount'];
+    }
+}

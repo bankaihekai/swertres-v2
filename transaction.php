@@ -10,12 +10,7 @@ if (!isset($_SESSION['id'])) {
 $_SESSION['date'] = date("Y-m-j");
 
 // fetch deduction amount from db
-$deduct_query = mysqli_query(connect(),"SELECT * FROM `deduction` LIMIT 1");
-
-if(mysqli_num_rows($deduct_query)>0){
-    $row = mysqli_fetch_assoc($deduct_query);
-    $_SESSION['deduction'] = $row['amount'];
-}
+deduction();
 
 if (isset($_POST['hidden-date'])) {
     $hiddenDate = $_POST['hidden-date'];
@@ -33,8 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $new_deduction_query = mysqli_query(connect(),$dsql);
 
             if($new_deduction_query){
-                header("Location: transaction.php");
-                exit();
+                deduction();
             }else{
                 echo "ERROR!";
             }
