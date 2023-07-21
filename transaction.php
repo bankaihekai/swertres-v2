@@ -8,7 +8,14 @@ if (!isset($_SESSION['id'])) {
 }
 
 $_SESSION['date'] = date("Y-m-j");
-$_SESSION['deduction'] = 0;
+
+// fetch deduction amount from db
+$deduct_query = mysqli_query(connect(),"SELECT * FROM `deduction` LIMIT 1");
+
+if(mysqli_num_rows($deduct_query)>0){
+    $row = mysqli_fetch_assoc($deduct_query);
+    $_SESSION['deduction'] = $row['amount'];
+}
 
 if (isset($_POST['hidden-date'])) {
     $hiddenDate = $_POST['hidden-date'];
@@ -21,7 +28,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $newDeduction = filter_var($_POST['deduction'], FILTER_VALIDATE_INT);
 
         if ($newDeduction !== false) {
-            $_SESSION['deduction'] = $newDeduction;
+
+            $dsql = "UPDATE `deduction` SET `amount`='$newDeduction' WHERE `id` = '1'";
+            $new_deduction_query = mysqli_query(connect(),$dsql);
+
+            if($new_deduction_query){
+                header("Location: transaction.php");
+                exit();
+            }else{
+                echo "ERROR!";
+            }
+            
         } else {
             echo "error";
         }

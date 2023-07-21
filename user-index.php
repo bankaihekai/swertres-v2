@@ -15,6 +15,7 @@ if (isset($_POST['submit'])) {
 
     if (isset($_POST['straight-amount'])) {
         $straight_amount = $_POST['straight-amount'];
+        
     }
 
     if (isset($_POST['ramble-amount'])) {

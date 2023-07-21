@@ -41,51 +41,159 @@ function inputSwertres($swertres_number, $straight_amount, $ramble_amount)
     $current_date = date("Y-n-j");
     $current_time = date("h:i A");
 
+    $straight_type = "straight";
+    $ramble_type = "ramble";
+
     if (strtotime($current_time) >= strtotime("21:00:00")) {
         $current_date = date("Y-n-j", strtotime("+1 day"));
     }
 
-    $straight_type = "straight";
-    $ramble_type = "ramble";
-
+    // straight and ramble have values
     if ($straight_amount != null && $ramble_amount != null) {
 
-        $sql_straight = "INSERT INTO `transaction`
-                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
-                        VALUES
-                        ('$swertres_number','$straight_type','$straight_amount','$current_time','$current_date','pending')";
+        // for straight number
+        do {
+            $number_id = rand();
+            $check_sql = "SELECT COUNT(*) as count FROM `transaction` WHERE `number_id` = '$number_id'";
+            $check_query = mysqli_query(connect(), $check_sql);
+            $count_result = mysqli_fetch_assoc($check_query);
+        } while ($count_result['count'] > 0);
 
-        $sql_ramble = "INSERT INTO `transaction`
-                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
+        $str_id = $number_id + 1;
+        $result = 0;
+
+        $sql_straight = "INSERT INTO `transaction`
+                        (`number_id`,`swertres_no`,`type`,`amount`,`original_amount`,`time`,`date`)
                         VALUES
-                        ('$swertres_number','$ramble_type','$ramble_amount','$current_time','$current_date','pending')";
+                        ('$str_id','$swertres_number','$straight_type','$straight_amount','$straight_amount','$current_time','$current_date')";
 
         $query_straight = mysqli_query(connect(), $sql_straight);
-        $query_ramble = mysqli_query(connect(), $sql_ramble);
+        if ($query_straight) {
+            $result += 1;
+        } else {
+            $_SESSION['error-message'] = "MYSQL Error!";
+        }
 
-        if ($query_straight && $query_ramble) {
+        if (r_2digit_same($swertres_number)) {
+
+            $combinations = array_unique(r_2digit_data($swertres_number));
+            $new_amount = number_format($ramble_amount / 3, 2);
+
+            foreach ($combinations as $swertres_no) {
+
+                $sql_ramble = "INSERT INTO `transaction`
+                                (`number_id`,`swertres_no`,`type`,`amount`,`original_amount`,`time`,`date`)
+                                VALUES
+                                ('$number_id','$swertres_no','$ramble_type','$new_amount','$ramble_amount','$current_time','$current_date')";
+
+                $query_ramble = mysqli_query(connect(), $sql_ramble);
+
+                if ($query_ramble) {
+                    $result += 1;
+                } else {
+                    $_SESSION['error-message'] = "MYSQL Error!";
+                }
+            }
+        } else {
+            $combinations = r_2digit_data($swertres_number);
+            $new_amount = number_format($ramble_amount / 6, 2);
+
+            foreach ($combinations as $swertres_no) {
+
+                $sql_ramble = "INSERT INTO `transaction`
+                                (`number_id`,`swertres_no`,`type`,`amount`,`original_amount`,`time`,`date`)
+                                VALUES
+                                ('$number_id','$swertres_no','$ramble_type','$new_amount','$ramble_amount','$current_time','$current_date')";
+
+                $query_ramble = mysqli_query(connect(), $sql_ramble);
+
+                if ($query_ramble) {
+                    $result += 1;
+                } else {
+                    $_SESSION['error-message'] = "MYSQL Error!";
+                }
+            }
+        }
+
+        if ($result > 0) {
             $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
         } else {
             $_SESSION['error-message'] = "MYSQL Error!";
         }
+
+        // only ramble has values
     } else if ($straight_amount == null && $ramble_amount != null) {
-        $sql_ramble = "INSERT INTO `transaction`
-                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
-                        VALUES
-                        ('$swertres_number','$ramble_type','$ramble_amount','$current_time','$current_date','pending')";
 
-        $query_ramble = mysqli_query(connect(), $sql_ramble);
+        if (r_2digit_same($swertres_number)) {
 
-        if ($query_ramble) {
-            $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
+            $combinations = array_unique(r_2digit_data($swertres_number));
+            $new_amount = number_format($ramble_amount / 3, 2);
+
+            do {
+                $number_id = rand();
+                $check_sql = "SELECT COUNT(*) as count FROM `transaction` WHERE `number_id` = '$number_id'";
+                $check_query = mysqli_query(connect(), $check_sql);
+                $count_result = mysqli_fetch_assoc($check_query);
+            } while ($count_result['count'] > 0);
+
+            foreach ($combinations as $swertres_no) {
+
+                $sql_ramble = "INSERT INTO `transaction`
+                                (`number_id`,`swertres_no`,`type`,`amount`,`original_amount`,`time`,`date`)
+                                VALUES
+                                ('$number_id','$swertres_no','$ramble_type','$new_amount','$ramble_amount','$current_time','$current_date')";
+
+                $query_ramble = mysqli_query(connect(), $sql_ramble);
+
+                if ($query_ramble) {
+                    $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
+                } else {
+                    $_SESSION['error-message'] = "MYSQL Error!";
+                }
+            }
         } else {
-            $_SESSION['error-message'] = "MYSQL Error!";
+
+            $combinations = r_2digit_data($swertres_number);
+            $new_amount = number_format($ramble_amount / 6, 2);
+            
+            do {
+                $number_id = rand();
+                $check_sql = "SELECT COUNT(*) as count FROM `transaction` WHERE `number_id` = '$number_id'";
+                $check_query = mysqli_query(connect(), $check_sql);
+                $count_result = mysqli_fetch_assoc($check_query);
+            } while ($count_result['count'] > 0);
+
+            foreach ($combinations as $swertres_no) {
+
+                $sql_ramble = "INSERT INTO `transaction`
+                                (`number_id`,`swertres_no`,`type`,`amount`,`original_amount`,`time`,`date`)
+                                VALUES
+                                ('$number_id','$swertres_no','$ramble_type','$new_amount','$ramble_amount','$current_time','$current_date')";
+
+                $query_ramble = mysqli_query(connect(), $sql_ramble);
+
+                if ($query_ramble) {
+                    $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
+                } else {
+                    $_SESSION['error-message'] = "MYSQL Error!";
+                }
+            }
         }
+
+        // only straight has values
     } else if ($straight_amount != null && $ramble_amount == null) {
+
+        do {
+            $number_id = rand();
+            $check_sql = "SELECT COUNT(*) as count FROM `transaction` WHERE `number_id` = '$number_id'";
+            $check_query = mysqli_query(connect(), $check_sql);
+            $count_result = mysqli_fetch_assoc($check_query);
+        } while ($count_result['count'] > 0);
+
         $sql_straight = "INSERT INTO `transaction`
-                        (`swertres_no`,`type`,`amount`,`time`,`date`,`status`)
+                        (`number_id`,`swertres_no`,`type`,`amount`,`original_amount`,`time`,`date`)
                         VALUES
-                        ('$swertres_number','$straight_type','$straight_amount','$current_time','$current_date','pending')";
+                        ('$number_id','$swertres_number','$straight_type','$straight_amount','$straight_amount','$current_time','$current_date')";
 
         $query_straight = mysqli_query(connect(), $sql_straight);
 
@@ -101,15 +209,17 @@ function inputSwertres($swertres_number, $straight_amount, $ramble_amount)
     exit();
 }
 
-function r_2digit_same($number){
-    $digit1 = ($number/100)%10 ;
-    $digit2 = ($number/10)%10;
-    $digit3 = $number%10;
+function r_2digit_same($number)
+{
+    $digit1 = ($number / 100) % 10;
+    $digit2 = ($number / 10) % 10;
+    $digit3 = $number % 10;
 
-    return($digit1 === $digit2 || $digit1 === $digit3 || $digit2 === $digit3);
+    return ($digit1 === $digit2 || $digit1 === $digit3 || $digit2 === $digit3);
 }
 
-function r_2digit_data($number){
+function r_2digit_data($number)
+{
     if (strlen($number) === 1) {
         return [$number];
     }
@@ -130,7 +240,8 @@ function r_2digit_data($number){
     return $permutations;
 }
 
-function ramble_all_combinations($number) {
+function ramble_all_combinations($number)
+{
     $length = strlen($number);
     $combinations = [];
 
@@ -151,5 +262,3 @@ function ramble_all_combinations($number) {
 
     return $combinations;
 }
-
-
