@@ -74,7 +74,7 @@ if (isset($_POST['submit'])) {
                         </div>
                         <div class="mb-3">
                             <label for="swertres-number" class="form-label">Swertres Number</label>
-                            <input type="text" class="form-control" id="swertres-number" name="swertres-number" maxlength="3" pattern="[0-9]{3}" placeholder="000-999" required>
+                            <input type="text" class="form-control" id="swertres-number" name="swertres-number" maxlength="3" placeholder="000-999" required>
                         </div>
                         <div class="mb-3">
                             <label for="straight-amount" class="form-label">Straight Amount</label>
@@ -149,9 +149,46 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Incorrect Swertres No.</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center"> 
+                        <b>Please enter exactly &nbsp;<span class="text-danger">Three digit number!</span></b>.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/main.js"></script>
     <!-- <script src="js/content.js"></script> -->
     <script src="js/date.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const inputField = document.getElementById("swertres-number");
+            const form = document.querySelector("form");
+
+            // Add an event listener to the form submission
+            form.addEventListener("submit", function(event) {
+                if (inputField.value.length !== 3 || !/^\d{3}$/.test(inputField.value)) {
+                    // Prevent the form submission if the input is not three digits
+                    event.preventDefault();
+                    // Show the Bootstrap modal
+                    const myModal = new bootstrap.Modal(document.getElementById("myModal"));
+                    myModal.show();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

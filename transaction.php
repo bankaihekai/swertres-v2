@@ -262,7 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Tabs content -->
                 </div>
             </div>
-            <div class=" d-flex justify-content-center align-items-center pt-4">
+            <div class=" d-flex justify-content-center align-items-center pt-2">
                 <a href="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteData">Delete All Data</a>
             </div>
         </div>

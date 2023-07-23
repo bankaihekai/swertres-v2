@@ -61,12 +61,6 @@ if (isset($_POST['submit'])) {
                 </div>
                 <input type="submit" name="submit" class="btn btn-primary w-100" value="Login">
             </form>
-            <!-- <div class="d-flex justify-content-end">
-                <span>Don't have an account yet? Click <a href="register.php">here</a></span>
-            </div> -->
-            <div class="d-flex justify-content-end mt-2">
-                <a href="index.php" class="text-decoration-none text-secondary">Back</a>
-            </div>
         </div>
         <div class="card-footer text-center">
             &copy; Technical Myles
