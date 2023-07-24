@@ -204,7 +204,7 @@ function inputSwertres($swertres_number, $straight_amount, $ramble_amount)
         if (r_2digit_same($swertres_number)) {
 
             $combinations = array_unique(r_2digit_data($swertres_number));
-            $new_amount = round($ramble_amount / 3);
+            $new_amount = round($ramble_amount / 3, 1);
         } 
         // 3 digit different number
         else {
@@ -332,7 +332,7 @@ function inputSwertres($swertres_number, $straight_amount, $ramble_amount)
         if (r_2digit_same($swertres_number)) {
 
             $combinations = array_unique(r_2digit_data($swertres_number));
-            $new_amount = round($ramble_amount / 3);
+            $new_amount = round($ramble_amount / 3, 1);
         } 
         // 3 digit different number
         else {

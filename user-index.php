@@ -149,7 +149,7 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal fade" id="not-3digits" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -157,8 +157,27 @@ if (isset($_POST['submit'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="d-flex justify-content-center"> 
-                        <b>Please enter exactly &nbsp;<span class="text-danger">Three digit number!</span></b>.
+                    <div class="d-flex justify-content-center">
+                        <b>Please enter exactly &nbsp;<span class="text-danger">Three digit number!</span></b>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="amount-zero" tabindex="-1" aria-labelledby="amount-zeroLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="amount-zeroLabel">Invalid Amount</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        <b>Amount must be &nbsp;<span class="text-danger">Greater than 0!</span></b>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -175,17 +194,26 @@ if (isset($_POST['submit'])) {
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const inputField = document.getElementById("swertres-number");
-            const form = document.querySelector("form");
+            const form = document.getElementById("swertres-form");
 
             // Add an event listener to the form submission
             form.addEventListener("submit", function(event) {
+                // Check if Swertres Number is not three digits
                 if (inputField.value.length !== 3 || !/^\d{3}$/.test(inputField.value)) {
-                    // Prevent the form submission if the input is not three digits
                     event.preventDefault();
-                    // Show the Bootstrap modal
-                    const myModal = new bootstrap.Modal(document.getElementById("myModal"));
+                    const myModal = new bootstrap.Modal(document.getElementById("not-3digits"));
                     myModal.show();
                 }
+
+                // Validate Straight Amount and Ramble Amount
+                var straightAmount = parseFloat(document.getElementById("straight-amount").value);
+                var rambleAmount = parseFloat(document.getElementById("ramble-amount").value);
+
+                if (straightAmount <= 0 || rambleAmount <= 0) {
+                event.preventDefault();
+                const amountModal = new bootstrap.Modal(document.getElementById("amount-zero"));
+                amountModal.show();
+            }
             });
         });
     </script>
