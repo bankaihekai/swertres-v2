@@ -1,7 +1,15 @@
 <?php
 date_default_timezone_set('Asia/Manila');
+// date for UI
 $date_today2 = date("Y-m-j"); // for date picker format
 $date_today = date("F j, Y");
+
+// date for query
+$current_time = date("h:i A"); // 03:16 PM format
+$current_date = date("Y-n-j");
+if (strtotime($current_time) >= strtotime("21:00:00")) {
+    $current_date = date("Y-n-j", strtotime("+1 day"));
+}
 
 function connect()
 {
@@ -89,10 +97,11 @@ function ramble_all_combinations($number)
     return $combinations;
 }
 
-function deduction(){
-    $deduct_query = mysqli_query(connect(),"SELECT * FROM `deduction` LIMIT 1");
+function deduction()
+{
+    $deduct_query = mysqli_query(connect(), "SELECT * FROM `deduction` LIMIT 1");
 
-    if(mysqli_num_rows($deduct_query)>0){
+    if (mysqli_num_rows($deduct_query) > 0) {
         $row = mysqli_fetch_assoc($deduct_query);
         $_SESSION['deduction'] = $row['amount'];
     }
@@ -101,438 +110,251 @@ function deduction(){
 
 function inputSwertres($swertres_number, $straight_amount, $ramble_amount)
 {
-
-    $current_date = date("Y-n-j");
-    $current_time = date("h:i A"); // 03:16 PM
-    $time_today = date("H:i:s"); // 17:59:00
-    $straight_type = "straight";
-    $ramble_type = "ramble";
-
-    if (strtotime($current_time) >= strtotime("21:00:00")) {
-        $current_date = date("Y-n-j", strtotime("+1 day"));
-    }
-
-    // straight and ramble have values--------------------------------
-    if ($straight_amount != null && $ramble_amount != null) {
-
-        // for straight number
-        do {
-            $number_id = rand();
-            $check_sql = "SELECT COUNT(*) as count FROM `transaction` WHERE `number_id` = '$number_id'";
-            $check_query = mysqli_query(connect(), $check_sql);
-            $count_result = mysqli_fetch_assoc($check_query);
-        } while ($count_result['count'] > 0);
-
-        $str_id = $number_id + 1;
-        $result = 0;
-
-        // checking for number data time for script
-        if ( ($time_today >= "21:00:00") || ($time_today < "14:00:00") ) {
-            // for 2pm draws ----
-            $straight_sql = "SELECT * FROM `transaction` 
-                        WHERE `swertres_no` = '$swertres_number' 
-                        AND `type` = '$straight_type'
-                        AND `date` = '$current_date'
-                        AND (
-                                TIME_FORMAT(`time`, '%h:%i:%s %p') >= '09:00:00 PM'
-                                OR TIME_FORMAT(`time`, '%h:%i:%s %p') < '02:00:00 PM'
-                            )";
-        }
-        else if ( ($time_today >= "14:00:00") && ($time_today < "17:00:00") ) {
-            // for 5pm draws ----
-            $straight_sql = "SELECT * FROM `transaction` 
-                        WHERE `swertres_no` = '$swertres_number' 
-                        AND `type` = '$straight_type'
-                        AND `date` = '$current_date'
-                        AND (
-                                TIME_FORMAT(`time`, '%h:%i:%s %p') >= '02:00:00 PM'
-                                AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '05:00:00 PM'
-                            )";
-        }
-        else if ( ($time_today >= "17:00:00") && ($time_today < "21:00:00") ) {
-            // for 9pm draws ----
-            $straight_sql = "SELECT * FROM `transaction` 
-                        WHERE `swertres_no` = '$swertres_number' 
-                        AND `type` = '$straight_type'
-                        AND `date` = '$current_date'
-                        AND (
-                                TIME_FORMAT(`time`, '%h:%i:%s %p') >= '05:00:00 PM'
-                                AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '09:00:00 PM'
-                            )";
-        }else {
-            $_SESSION['error-message'] = "No Time Detected!";
-            exit();
-        }
-
-        $straight_query = mysqli_query(connect(),$straight_sql);
-
-        if(mysqli_num_rows($straight_query)>0){
-            $data = mysqli_fetch_assoc($straight_query);
-            $swertres_id = $data['transaction_id'];
-
-            $update_sql = "UPDATE `transaction` 
-                            SET `amount` = `amount` + '$straight_amount',
-                                `original_amount` = `original_amount` + '$straight_amount'  
-                            WHERE `transaction_id` = '$swertres_id'";
-
-            $update_query = mysqli_query(connect(),$update_sql);
-
-            if ($update_query) {
-                $result += 1;
-            } else {
-                $_SESSION['error-message'] = "MYSQL Error!";
-            }
-        }
-        else{
-            $sql_straight = "INSERT INTO `transaction`
-                            (`number_id`,`swertres_no`,`type`,`amount`,`original_amount`,`time`,`date`)
-                            VALUES
-                            ('$str_id','$swertres_number','$straight_type','$straight_amount','$straight_amount','$current_time','$current_date')";
-    
-            $query_straight = mysqli_query(connect(), $sql_straight);
-
-            if ($query_straight) {
-                $result += 1;
-            } else {
-                $_SESSION['error-message'] = "MYSQL Error!";
-            }
-        }
-
-        
-        // ---------------------------------------------------------- 
-        // 2 digit same number
-        if (r_2digit_same($swertres_number)) {
-
-            $combinations = array_unique(r_2digit_data($swertres_number));
-            $new_amount = round($ramble_amount / 3, 1);
-        } 
-        // 3 digit different number
-        else {
-            $combinations = r_2digit_data($swertres_number);
-            $new_amount = round($ramble_amount / 6);
-        }
-        
-        $split_number = str_split($swertres_number); // split the number to get single digits
-
-        foreach($combinations as $number){
-            $new_combinations[] = $number; // get all random numbers
-        }
-        
-        do {
-            $number_id = rand();
-            $check_sql = "SELECT COUNT(*) as count FROM `transaction` WHERE `number_id` = '$number_id'";
-            $check_query = mysqli_query(connect(), $check_sql);
-            $count_result = mysqli_fetch_assoc($check_query);
-        } while ($count_result['count'] > 0);
-
-        if (($time_today >= "21:00:00") || ($time_today < "14:00:00")) {
-            // for 2pm draws ----
-            $ramble_sql = "SELECT * FROM `transaction` WHERE
-                                `swertres_no` LIKE '%$split_number[0]%'
-                                AND `swertres_no` LIKE '%$split_number[1]%'
-                                AND `swertres_no` LIKE '%$split_number[2]%'
-                                AND `type` = '$ramble_type'
-                                AND `date` = '$current_date'
-                                AND (
-                                        TIME_FORMAT(`time`, '%h:%i:%s %p') >= '09:00:00 PM'
-                                        OR TIME_FORMAT(`time`, '%h:%i:%s %p') < '02:00:00 PM'
-                                    )";
-        } else if (($time_today >= "14:00:00") && ($time_today < "17:00:00")) {
-            // for 5pm draws ----
-            $ramble_sql = "SELECT * FROM `transaction` WHERE
-                                `swertres_no` LIKE '%$split_number[0]%'
-                                AND `swertres_no` LIKE '%$split_number[1]%'
-                                AND `swertres_no` LIKE '%$split_number[2]%'
-                                AND `type` = '$ramble_type'
-                                AND `date` = '$current_date'
-                                AND (
-                                        TIME_FORMAT(`time`, '%h:%i:%s %p') >= '02:00:00 PM'
-                                        AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '05:00:00 PM'
-                                    )";
-        } else if (($time_today >= "17:00:00") && ($time_today < "21:00:00")) {
-            // for 9pm draws ----
-            $ramble_sql = "SELECT * FROM `transaction` WHERE
-                                `swertres_no` LIKE '%$split_number[0]%'
-                                AND `swertres_no` LIKE '%$split_number[1]%'
-                                AND `swertres_no` LIKE '%$split_number[2]%'
-                                AND `type` = '$ramble_type'
-                                AND `date` = '$current_date'
-                                AND (
-                                        TIME_FORMAT(`time`, '%h:%i:%s %p') >= '05:00:00 PM'
-                                        AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '09:00:00 PM'
-                                    )";
-        } else {
-            $_SESSION['error-message'] = "No Time Detected!";
-            exit();
-        }
-
-        $ramble_query = mysqli_query(connect(), $ramble_sql);
-
-        if (mysqli_num_rows($ramble_query) > 0) {
-
-            while ($data = mysqli_fetch_assoc($ramble_query)) {
-
-                if (in_array($data['swertres_no'], $new_combinations)) {
-                    $final_combination[] = $data['swertres_no'];
-                    $final_trans_id[] = $data['transaction_id'];
-                }
-            }
-            $max_length = count($final_combination);
-            $result = 0;
-
-            for($i=0;$i < $max_length;$i++){
-                $update_sql = "UPDATE `transaction` 
-                                SET `amount` = `amount` + '$new_amount',
-                                    `original_amount` = `original_amount` + '$ramble_amount'  
-                                WHERE `swertres_no` = '$final_combination[$i]'
-                                AND `transaction_id` = '$final_trans_id[$i]'";
-
-                $update_query = mysqli_query(connect(),$update_sql);   
-
-                if ($update_query>0) {
-                    $result += 1;
-                } else {
-                    $_SESSION['error-message'] = "MYSQL Error!";
-                }
-            }
-        
-            if ($result>0) {
-                $result += 1;
-            } else {
-                $_SESSION['error-message'] = "MYSQL Error!";
-            }
-        }else{
-            foreach ($combinations as $swertres_no) {
-
-                $sql_ramble = "INSERT INTO `transaction`
-                                (`number_id`,`swertres_no`,`type`,`amount`,`original_amount`,`time`,`date`)
-                                VALUES
-                                ('$number_id','$swertres_no','$ramble_type','$new_amount','$ramble_amount','$current_time','$current_date')";
-
-                $query_ramble = mysqli_query(connect(), $sql_ramble);
-
-                if ($query_ramble) {
-                    $result += 1;
-                } else {
-                    $_SESSION['error-message'] = "MYSQL Error!";
-                }
-            }
-        }
-
-        if ($result > 0) {
-            $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
-        } else {
-            $_SESSION['error-message'] = "MYSQL Error!";
-        }
-
-        // only ramble has values----------------------------------------
-    } else if ($straight_amount == null && $ramble_amount != null) {
+    // if ramble amount have values--------------------------------
+    if ($ramble_amount != null) {
 
         // 2 digit same number
         if (r_2digit_same($swertres_number)) {
-
             $combinations = array_unique(r_2digit_data($swertres_number));
             $new_amount = round($ramble_amount / 3, 1);
-        } 
+        }
         // 3 digit different number
         else {
             $combinations = r_2digit_data($swertres_number);
-            $new_amount = round($ramble_amount / 6);
+            $new_amount = round($ramble_amount / 6, 1);
         }
-        
-        $split_number = str_split($swertres_number); // split the number to get single digits
 
-        foreach($combinations as $number){
+        foreach ($combinations as $number) {
             $new_combinations[] = $number; // get all random numbers
         }
-        
-        do {
-            $number_id = rand();
-            $check_sql = "SELECT COUNT(*) as count FROM `transaction` WHERE `number_id` = '$number_id'";
-            $check_query = mysqli_query(connect(), $check_sql);
-            $count_result = mysqli_fetch_assoc($check_query);
-        } while ($count_result['count'] > 0);
+        $leftover_combination = array();
 
-        if (($time_today >= "21:00:00") || ($time_today < "14:00:00")) {
-            // for 2pm draws ----
-            $check_data_sql = "SELECT * FROM `transaction` WHERE
-                                `swertres_no` LIKE '%$split_number[0]%'
-                                AND `swertres_no` LIKE '%$split_number[1]%'
-                                AND `swertres_no` LIKE '%$split_number[2]%'
-                                AND `type` = '$ramble_type'
-                                AND `date` = '$current_date'
-                                AND (
-                                        TIME_FORMAT(`time`, '%h:%i:%s %p') >= '09:00:00 PM'
-                                        OR TIME_FORMAT(`time`, '%h:%i:%s %p') < '02:00:00 PM'
-                                    )";
-        } else if (($time_today >= "14:00:00") && ($time_today < "17:00:00")) {
-            // for 5pm draws ----
-            $check_data_sql = "SELECT * FROM `transaction` WHERE
-                                `swertres_no` LIKE '%$split_number[0]%'
-                                AND `swertres_no` LIKE '%$split_number[1]%'
-                                AND `swertres_no` LIKE '%$split_number[2]%'
-                                AND `type` = '$ramble_type'
-                                AND `date` = '$current_date'
-                                AND (
-                                        TIME_FORMAT(`time`, '%h:%i:%s %p') >= '02:00:00 PM'
-                                        AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '05:00:00 PM'
-                                    )";
-        } else if (($time_today >= "17:00:00") && ($time_today < "21:00:00")) {
-            // for 9pm draws ----
-            $check_data_sql = "SELECT * FROM `transaction` WHERE
-                                `swertres_no` LIKE '%$split_number[0]%'
-                                AND `swertres_no` LIKE '%$split_number[1]%'
-                                AND `swertres_no` LIKE '%$split_number[2]%'
-                                AND `type` = '$ramble_type'
-                                AND `date` = '$current_date'
-                                AND (
-                                        TIME_FORMAT(`time`, '%h:%i:%s %p') >= '05:00:00 PM'
-                                        AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '09:00:00 PM'
-                                    )";
-        } else {
-            $_SESSION['error-message'] = "No Time Detected!";
-            exit();
-        }
+        $number_id = number_id_checking();
 
-        $check_data_query = mysqli_query(connect(), $check_data_sql);
+        $check_data_query = mysqli_query(connect(), ramble_checking($swertres_number));
 
         if (mysqli_num_rows($check_data_query) > 0) {
 
             while ($data = mysqli_fetch_assoc($check_data_query)) {
-
                 if (in_array($data['swertres_no'], $new_combinations)) {
                     $final_combination[] = $data['swertres_no'];
                     $final_trans_id[] = $data['transaction_id'];
+                } else {
+                    $leftover_combination[] = $data['swertres_no'];
                 }
             }
-            $max_length = count($final_combination);
-            $result = 0;
 
-            for($i=0;$i < $max_length;$i++){
+            $leftover_combination = array_diff($new_combinations, $final_combination); // Get the leftover values (values in $new_combinations that are not in $final_combination)
+            $leftover_combination = array_values($leftover_combination); // Reset the index position of the array elements in $leftover_combination
+
+            $found_max_length = count($final_combination);
+            $leftover_max_length = count($leftover_combination);
+
+            for ($i = 0; $i < $found_max_length; $i++) {
+
                 $update_sql = "UPDATE `transaction` 
                                 SET `amount` = `amount` + '$new_amount',
                                     `original_amount` = `original_amount` + '$ramble_amount'  
                                 WHERE `swertres_no` = '$final_combination[$i]'
                                 AND `transaction_id` = '$final_trans_id[$i]'";
 
-                $update_query = mysqli_query(connect(),$update_sql);   
+                $update_query = mysqli_query(connect(), $update_sql);
 
-                if ($update_query>0) {
-                    $result += 1;
-                } else {
+                if (!$update_query) {
                     $_SESSION['error-message'] = "MYSQL Error!";
                 }
             }
-        
-            if ($result>0) {
-                $_SESSION['success-message'] = "Swertres Number Successfully Updated!";
-            } else {
-                $_SESSION['error-message'] = "MYSQL Error!";
+
+            if ($leftover_max_length > 0) {
+                ramble_insert_query($leftover_combination, $number_id, $new_amount, $ramble_amount);
             }
-        }else{
-            foreach ($combinations as $swertres_no) {
-
-                $sql_ramble = "INSERT INTO `transaction`
-                                (`number_id`,`swertres_no`,`type`,`amount`,`original_amount`,`time`,`date`)
-                                VALUES
-                                ('$number_id','$swertres_no','$ramble_type','$new_amount','$ramble_amount','$current_time','$current_date')";
-
-                $query_ramble = mysqli_query(connect(), $sql_ramble);
-
-                if ($query_ramble) {
-                    $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
-                } else {
-                    $_SESSION['error-message'] = "MYSQL Error!";
-                }
-            }
+        } else {
+            ramble_insert_query($combinations, $number_id, $new_amount, $ramble_amount);
         }
-        // only straight has values
-    } else if ($straight_amount != null && $ramble_amount == null) {
-
-        do {
-            $number_id = rand();
-            $check_sql = "SELECT COUNT(*) as count FROM `transaction` WHERE `number_id` = '$number_id'";
-            $check_query = mysqli_query(connect(), $check_sql);
-            $count_result = mysqli_fetch_assoc($check_query);
-        } while ($count_result['count'] > 0);
-        
-        // checking for number data time for script
-        if ( ($time_today >= "21:00:00") || ($time_today < "14:00:00") ) {
-            // for 2pm draws ----
-            $check_data_sql = "SELECT * FROM `transaction` 
-                        WHERE `swertres_no` = '$swertres_number' 
-                        AND `type` = '$straight_type'
-                        AND `date` = '$current_date'
-                        AND (
-                                TIME_FORMAT(`time`, '%h:%i:%s %p') >= '09:00:00 PM'
-                                OR TIME_FORMAT(`time`, '%h:%i:%s %p') < '02:00:00 PM'
-                            )";
-        }
-        else if ( ($time_today >= "14:00:00") && ($time_today < "17:00:00") ) {
-            // for 5pm draws ----
-            $check_data_sql = "SELECT * FROM `transaction` 
-                        WHERE `swertres_no` = '$swertres_number' 
-                        AND `type` = '$straight_type'
-                        AND `date` = '$current_date'
-                        AND (
-                                TIME_FORMAT(`time`, '%h:%i:%s %p') >= '02:00:00 PM'
-                                AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '05:00:00 PM'
-                            )";
-        }
-        else if ( ($time_today >= "17:00:00") && ($time_today < "21:00:00") ) {
-            // for 9pm draws ----
-            $check_data_sql = "SELECT * FROM `transaction` 
-                        WHERE `swertres_no` = '$swertres_number' 
-                        AND `type` = '$straight_type'
-                        AND `date` = '$current_date'
-                        AND (
-                                TIME_FORMAT(`time`, '%h:%i:%s %p') >= '05:00:00 PM'
-                                AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '09:00:00 PM'
-                            )";
-        }else {
-            $_SESSION['error-message'] = "No Time Detected!";
-            exit();
-        }
-
-        $check_data_query = mysqli_query(connect(),$check_data_sql);
-
-        if(mysqli_num_rows($check_data_query)>0){
-            $data = mysqli_fetch_assoc($check_data_query);
-            $swertres_id = $data['transaction_id'];
-
-            $update_sql = "UPDATE `transaction` 
-                            SET `amount` = `amount` + '$straight_amount',
-                                `original_amount` = `original_amount` + '$straight_amount'  
-                            WHERE `transaction_id` = '$swertres_id'";
-
-            $update_query = mysqli_query(connect(),$update_sql);
-
-            if ($update_query) {
-                $_SESSION['success-message'] = "Swertres Number Successfully Updated!";
-            } else {
-                $_SESSION['error-message'] = "MYSQL Error!";
-            }
-        }
-        else{
-            $sql_straight = "INSERT INTO `transaction`
-                            (`number_id`,`swertres_no`,`type`,`amount`,`original_amount`,`time`,`date`)
-                            VALUES
-                            ('$number_id','$swertres_number','$straight_type','$straight_amount','$straight_amount','$current_time','$current_date')";
-    
-            $query_straight = mysqli_query(connect(), $sql_straight);
-
-            if ($query_straight) {
-                $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
-            } else {
-                $_SESSION['error-message'] = "MYSQL Error!";
-            }
-        }
-    } else {
-        $_SESSION['error-message'] = "Must input a straight/ramble amount!";
     }
+
+    // if straight amount have values--------------------------------
+    if ($straight_amount != null) {
+
+        $number_id = number_id_checking();
+
+        // checking for number data time for script
+        $check_data_query = mysqli_query(connect(), straight_checking($swertres_number));
+
+        if (mysqli_num_rows($check_data_query) > 0) {
+            $data = mysqli_fetch_assoc($check_data_query);
+            $transaction_id = $data['transaction_id'];
+
+            straight_update_query($straight_amount, $transaction_id);
+        } else {
+            straight_insert_query($number_id, $swertres_number, $straight_amount);
+        }
+    }
+
     header("Location: user-index.php");
     exit();
 }
 
-// echo nl2br("\n")."".json_encode(inputSwertres('093','','5'));
+// echo json_encode(inputSwertres('300', '1', '1'));
 
+function straight_checking($swertres_number)
+{
+    global $current_date;
+    $time_today = date("H:i:s"); // 17:59:00
+
+    if (($time_today >= "21:00:00") || ($time_today < "14:00:00")) {
+        // for 2pm draws ----
+        $straight_sql = "SELECT * FROM `transaction` 
+                    WHERE `swertres_no` = '$swertres_number'
+                    AND `date` = '$current_date'
+                    AND (
+                            TIME_FORMAT(`time`, '%h:%i:%s %p') >= '09:00:00 PM'
+                            OR TIME_FORMAT(`time`, '%h:%i:%s %p') < '02:00:00 PM'
+                        )";
+    } else if (($time_today >= "14:00:00") && ($time_today < "17:00:00")) {
+        // for 5pm draws ----
+        $straight_sql = "SELECT * FROM `transaction` 
+                    WHERE `swertres_no` = '$swertres_number'
+                    AND `date` = '$current_date'
+                    AND (
+                            TIME_FORMAT(`time`, '%h:%i:%s %p') >= '02:00:00 PM'
+                            AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '05:00:00 PM'
+                        )";
+    } else if (($time_today >= "17:00:00") && ($time_today < "21:00:00")) {
+        // for 9pm draws ----
+        $straight_sql = "SELECT * FROM `transaction` 
+                    WHERE `swertres_no` = '$swertres_number'
+                    AND `date` = '$current_date'
+                    AND (
+                            TIME_FORMAT(`time`, '%h:%i:%s %p') >= '05:00:00 PM'
+                            AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '09:00:00 PM'
+                        )";
+    } else {
+        $_SESSION['error-message'] = "No Time Detected!";
+        exit();
+    }
+    return $straight_sql;
+}
+
+function ramble_checking($swertres_number)
+{
+    global $current_date;
+    $split_number = str_split($swertres_number); // split the number to get single digits
+    $time_today = date("H:i:s"); // 17:59:00
+
+    if (($time_today >= "21:00:00") || ($time_today < "14:00:00")) {
+        // for 2pm draws ----
+        $ramble_sql = "SELECT * FROM `transaction` WHERE
+                            `swertres_no` LIKE '%$split_number[0]%'
+                            AND `swertres_no` LIKE '%$split_number[1]%'
+                            AND `swertres_no` LIKE '%$split_number[2]%'
+                            AND `date` = '$current_date'
+                            AND (
+                                    TIME_FORMAT(`time`, '%h:%i:%s %p') >= '09:00:00 PM'
+                                    OR TIME_FORMAT(`time`, '%h:%i:%s %p') < '02:00:00 PM'
+                                )";
+    } else if (($time_today >= "14:00:00") && ($time_today < "17:00:00")) {
+        // for 5pm draws ----
+        $ramble_sql = "SELECT * FROM `transaction` WHERE
+                            `swertres_no` LIKE '%$split_number[0]%'
+                            AND `swertres_no` LIKE '%$split_number[1]%'
+                            AND `swertres_no` LIKE '%$split_number[2]%'
+                            AND `date` = '$current_date'
+                            AND (
+                                    TIME_FORMAT(`time`, '%h:%i:%s %p') >= '02:00:00 PM'
+                                    AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '05:00:00 PM'
+                                )";
+    } else if (($time_today >= "17:00:00") && ($time_today < "21:00:00")) {
+        // for 9pm draws ----
+        $ramble_sql = "SELECT * FROM `transaction` WHERE
+                            `swertres_no` LIKE '%$split_number[0]%'
+                            AND `swertres_no` LIKE '%$split_number[1]%'
+                            AND `swertres_no` LIKE '%$split_number[2]%'
+                            AND `date` = '$current_date'
+                            AND (
+                                    TIME_FORMAT(`time`, '%h:%i:%s %p') >= '05:00:00 PM'
+                                    AND TIME_FORMAT(`time`, '%h:%i:%s %p') < '09:00:00 PM'
+                                )";
+    } else {
+        $_SESSION['error-message'] = "No Time Detected!";
+        exit();
+    }
+    return $ramble_sql;
+}
+
+function number_id_checking()
+{
+    do {
+        $number_id = rand();
+        $check_sql = "SELECT COUNT(*) as count FROM `transaction` WHERE `number_id` = '$number_id'";
+        $check_query = mysqli_query(connect(), $check_sql);
+        $count_result = mysqli_fetch_assoc($check_query);
+    } while ($count_result['count'] > 0);
+
+    return $number_id;
+}
+
+function straight_update_query($straight_amount, $transaction_id)
+{
+    $update_sql = "UPDATE `transaction` 
+                SET `amount` = `amount` + '$straight_amount',
+                    `original_amount` = `original_amount` + '$straight_amount'  
+                WHERE `transaction_id` = '$transaction_id'";
+
+    $update_query = mysqli_query(connect(), $update_sql);
+
+    if ($update_query) {
+        return $_SESSION['success-message'] = "Swertres Number Successfully Updated!";
+    } else {
+        return $_SESSION['error-message'] = "MYSQL Error!";
+    }
+}
+
+function straight_insert_query($number_id, $swertres_number, $straight_amount)
+{
+
+    global $current_date;
+    global $current_time;
+
+    $sql_straight = "INSERT INTO `transaction`
+                    (`number_id`,`swertres_no`,`type`,`amount`,`original_amount`,`time`,`date`)
+                    VALUES
+                    ('$number_id','$swertres_number','straight','$straight_amount','$straight_amount','$current_time','$current_date')";
+
+    $query_straight = mysqli_query(connect(), $sql_straight);
+
+    if ($query_straight) {
+        return $_SESSION['success-message'] = "Swertres Number Successfully Submitted!";
+    } else {
+        return $_SESSION['error-message'] = "MYSQL Error!";
+    }
+}
+
+function ramble_insert_query($combinations = array(), $number_id, $new_amount, $ramble_amount)
+{
+
+    global $current_date;
+    global $current_time;
+    $success = true; // Assume success initially
+
+    foreach ($combinations as $swertres_no) {
+        $sql_ramble = "INSERT INTO `transaction`
+                        (`number_id`, `swertres_no`, `type`, `amount`, `original_amount`, `time`, `date`)
+                        VALUES
+                        ('$number_id', '$swertres_no', 'ramble', '$new_amount', '$ramble_amount', '$current_time', '$current_date')";
+
+        $query_ramble = mysqli_query(connect(), $sql_ramble);
+
+        if (!$query_ramble) {
+            // If any query fails, set $success to false
+            $success = false;
+            break; // Exit the loop early as there's no point in continuing
+        }
+    }
+
+    if ($success) {
+        return $_SESSION['success-message'] = "Swertres Number(s) Successfully Submitted!";
+    } else {
+        return $_SESSION['error-message'] = "MYSQL Error!";
+    }
+}
