@@ -347,8 +347,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </h6>
                     </div>
                     <div class="d-flex justify-content-center text-center mt-3">
-                        <button type="button" class="btn btn-danger me-3 w-50" data-bs-dismiss="modal">No</button>
-                        <a href="db/delete.php" class="btn btn-primary">Yes</a>
+                        <a href="db/delete.php" class="btn btn-primary me-3">Yes</a>
+                        <button type="button" class="btn btn-danger w-50" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
                 <!-- <div class="modal-footer">
