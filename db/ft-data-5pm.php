@@ -17,7 +17,7 @@ if (isset($_SESSION['date'])) {
     if (mysqli_num_rows($five_pm_query) > 0) {
         while ($row = mysqli_fetch_assoc($five_pm_query)) {
             $swertres_no = $row['swertres_no'];
-            $old_amount = number_format($row['amount']);
+            $old_amount = number_format($row['amount'], 1);
             $amount = floatval(str_replace(',', '', $row['amount']));
             $type = $row['type'];
 

@@ -17,7 +17,7 @@ if (mysqli_num_rows($all_query)>0) {
     if($total==0){
         echo "0.00";
     }else{
-        echo round($total) . "";
+        echo number_format(round($total)) . "";
     }
     
 } else {
