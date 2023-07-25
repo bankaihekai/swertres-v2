@@ -173,14 +173,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </tr>
                                     </thead>
                                     <tbody class="sticky-header">
-                                        <tr class="border border-secondary border-1">
-                                            <th class="text-center text-white border-0 bg-dark align-middle" rowspan="2">Swertres</th>
-                                            <th class="text-center text-white border-0 bg-dark" colspan="2">Amount
+                                        <tr class="">
+                                            <th class="text-center text-white border border-secondary bg-dark align-middle" rowspan="2">Swertres</th>
+                                            <th class="text-center text-white border border-secondary bg-dark" colspan="2">Amount
                                             </th>
                                         </tr>
-                                        <tr class="border-0">
-                                            <th class="text-center text-white border-0 bg-dark">New</th>
-                                            <th class="text-center text-white border-0 bg-dark">Original</th>
+                                        <tr class="">
+                                            <th class="text-center text-white border border-secondary bg-dark">New</th>
+                                            <th class="text-center text-white border border-secondary bg-dark">Original</th>
                                         </tr>
                                     </tbody>
                                         <!-- Transaction data will be dynamically inserted here -->
@@ -192,8 +192,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="tab-pane fade" id="ex-with-icons-tabs-2" role="tabpanel" aria-labelledby="ex-with-icons-tab-2">
                             <div class="table-responsive overflow-auto" id="table-container">
-                                <table class="table table-sm table-bordered">
-                                    <thead>
+                            <table class="table table-sm table-bordered ">
+                                    <thead >
                                         <tr>
                                             <th colspan="3" class="text-center table-dark">
                                                 Total Amount
@@ -209,27 +209,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr class="border border-secondary border-1">
-                                            <th class="text-center text-white border-0 bg-dark align-middle" rowspan="2">Swertres</th>
-                                            <th class="text-center text-white border-0 bg-dark" colspan="2">Amount
+                                    </thead>
+                                    <tbody class="sticky-header">
+                                        <tr class="">
+                                            <th class="text-center text-white border border-secondary bg-dark align-middle" rowspan="2">Swertres</th>
+                                            <th class="text-center text-white border border-secondary bg-dark" colspan="2">Amount
                                             </th>
                                         </tr>
-                                        <tr class="border-0">
-                                            <th class="text-center text-white border-0 bg-dark">New</th>
-                                            <th class="text-center text-white border-0 bg-dark">Original</th>
+                                        <tr class="">
+                                            <th class="text-center text-white border border-secondary bg-dark">New</th>
+                                            <th class="text-center text-white border border-secondary bg-dark">Original</th>
                                         </tr>
-                                    </thead>
-                                    <tbody id="transaction-table-body-5pm">
-                                        <!-- Transaction data will be dynamically inserted here -->
                                     </tbody>
-                                    <tfoot></tfoot>
+                                        <!-- Transaction data will be dynamically inserted here -->
+                                    <tfoot id="transaction-table-body-5pm">
+
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="ex-with-icons-tabs-3" role="tabpanel" aria-labelledby="ex-with-icons-tab-3">
                             <div class="table-responsive overflow-auto" id="table-container">
-                                <table class="table table-sm table-bordered">
-                                    <thead>
+                            <table class="table table-sm table-bordered ">
+                                    <thead >
                                         <tr>
                                             <th colspan="3" class="text-center table-dark">
                                                 Total Amount
@@ -245,29 +247,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr class="border border-secondary border-1">
-                                            <th class="text-center text-white border-0 bg-dark align-middle" rowspan="2">Swertres</th>
-                                            <th class="text-center text-white border-0 bg-dark" colspan="2">Amount
+                                    </thead>
+                                    <tbody class="sticky-header">
+                                        <tr class="">
+                                            <th class="text-center text-white border border-secondary bg-dark align-middle" rowspan="2">Swertres</th>
+                                            <th class="text-center text-white border border-secondary bg-dark" colspan="2">Amount
                                             </th>
                                         </tr>
-                                        <tr class="border-0">
-                                            <th class="text-center text-white border-0 bg-dark">New</th>
-                                            <th class="text-center text-white border-0 bg-dark">Original</th>
+                                        <tr class="">
+                                            <th class="text-center text-white border border-secondary bg-dark">New</th>
+                                            <th class="text-center text-white border border-secondary bg-dark">Original</th>
                                         </tr>
-                                    </thead>
-                                    <tbody id="transaction-table-body-9pm">
-                                        <!-- Transaction data will be dynamically inserted here -->
                                     </tbody>
-                                    <tfoot></tfoot>
+                                        <!-- Transaction data will be dynamically inserted here -->
+                                    <tfoot id="transaction-table-body-9pm">
+
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
                     </div>
                     <!-- Tabs content -->
                 </div>
-            </div>
-            <div class=" d-flex justify-content-center align-items-center pt-2">
-                <!-- <a href="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteData">Delete All Data</a> -->
             </div>
         </div>
     </div>
