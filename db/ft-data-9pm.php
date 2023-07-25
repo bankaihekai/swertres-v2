@@ -17,26 +17,27 @@ if (isset($_SESSION['date'])) {
     if (mysqli_num_rows($nine_pm_query) > 0) {
         while ($row = mysqli_fetch_assoc($nine_pm_query)) {
             $swertres_no = $row['swertres_no'];
-            $amount = number_format($row['amount'] ,1);
+            $old_amount = number_format($row['amount']);
+            $amount = floatval(str_replace(',', '', $row['amount'])); 
             $type = $row['type'];
 
             $total = $amount - $_SESSION['deduction'];
 
-                echo "
+            echo "
                 <tr>
                     <td class='text-center'>
                         " . $swertres_no . "
                     </td>
                     <td class='text-center'>";
-                if ($total < 0) {
-                    echo "<b class='text-danger'>" . $total . "</b>";
-                } else {
-                    echo "<b class='text-success'>" . $total . "</b>";
-                }
-                echo "
+            if ($total < 0) {
+                echo "<b class='text-danger'>" . number_format($total, 1) . "</b>";
+            } else {
+                echo "<b class='text-success'>" . number_format($total, 1) . "</b>";
+            }
+            echo "
                     </td>
                     <td class='text-center'>
-                        " . $amount . "
+                        " . $old_amount . "
                     </td>
                 </tr>";
         }
