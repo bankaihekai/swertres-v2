@@ -106,6 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="d-flex">
                             <input type="number" class="form-control" name="deduction" id="deduction" placeholder="Deduction Amount: <?php echo $_SESSION['deduction'] ?>">
                             &nbsp;
+                            <a href="transaction.php" class="btn btn-primary me-1">
+                                <i class="fa fa-rotate-right"></i>
+                            </a>
                             <button type="submit" name="submit" class="btn btn-primary">
                                 <i class="fa fa-send"></i>
                             </button>
