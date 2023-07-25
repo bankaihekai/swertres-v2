@@ -70,7 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <link rel="stylesheet" href="css/style.css">
 </head>
-
+<style>
+  .sticky-header {
+    position: sticky;
+    top: 0; /* You can adjust this value based on your design and layout */
+    background-color: #f5f5f5; /* Customize the background color as needed */
+  }
+</style>
 <body>
     <div class="overlay position-fixed">
         <div class="overlay-content shadow-sm">
@@ -149,11 +155,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Tabs navs -->
 
                     <!-- Tabs content -->
-                    <div class="tab-content" id="ex-with-icons-content">
+                    <div class="tab-content " id="ex-with-icons-content">
                         <div class="tab-pane fade show active" id="ex-with-icons-tabs-1" role="tabpanel" aria-labelledby="ex-with-icons-tab-1">
-                            <div class="table-responsive overflow-auto" id="table-container">
-                                <table class="table table-sm table-bordered">
-                                    <thead>
+                            <div class="table-responsive overflow-auto " id="table-container">
+                                <table class="table table-sm table-bordered ">
+                                    <thead >
                                         <tr>
                                             <th colspan="3" class="text-center table-dark">
                                                 Total Amount
@@ -169,6 +175,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </div>
                                             </td>
                                         </tr>
+                                    </thead>
+                                    <tbody class="sticky-header">
                                         <tr class="border border-secondary border-1">
                                             <th class="text-center text-white border-0 bg-dark align-middle" rowspan="2">Swertres</th>
                                             <th class="text-center text-white border-0 bg-dark" colspan="2">Amount
@@ -178,11 +186,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <th class="text-center text-white border-0 bg-dark">New</th>
                                             <th class="text-center text-white border-0 bg-dark">Original</th>
                                         </tr>
-                                    </thead>
-                                    <tbody id="transaction-table-body-2pm">
-                                        <!-- Transaction data will be dynamically inserted here -->
                                     </tbody>
-                                    <tfoot></tfoot>
+                                        <!-- Transaction data will be dynamically inserted here -->
+                                    <tfoot id="transaction-table-body-2pm">
+
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -263,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
             <div class=" d-flex justify-content-center align-items-center pt-2">
-                <a href="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteData">Delete All Data</a>
+                <!-- <a href="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteData">Delete All Data</a> -->
             </div>
         </div>
     </div>
@@ -294,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </ul>
                     </div>
                     <div class="d-flex justify-content-end w-100 ">
-                        <h6 class="my-auto">SWERTRES ANALYTICS APP</h6>
+                        <button class="my-auto btn bg-transparent fw-bold" data-bs-toggle="modal" data-bs-target="#deleteData">SWERTRES ANALYTICS APP</button>
                     </div>
                 </div>
             </div>
@@ -338,11 +346,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <small class="text-danger">Note: This Action cannot be undo.</small>
                         </h6>
                     </div>
+                    <div class="d-flex justify-content-center text-center mt-3">
+                        <button type="button" class="btn btn-danger me-3 w-50" data-bs-dismiss="modal">No</button>
+                        <a href="db/delete.php" class="btn btn-primary">Yes</a>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
-                    <a href="db/delete.php" class="btn btn-primary">Yes</a>
-                </div>
+                <!-- <div class="modal-footer">
+                    
+                </div> -->
             </div>
         </div>
     </div>
