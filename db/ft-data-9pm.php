@@ -17,8 +17,8 @@ if (isset($_SESSION['date'])) {
     if (mysqli_num_rows($nine_pm_query) > 0) {
         while ($row = mysqli_fetch_assoc($nine_pm_query)) {
             $swertres_no = $row['swertres_no'];
-            $old_amount = number_format($row['amount']);
-            $amount = floatval(str_replace(',', '', $row['amount'], 1)); 
+            $old_amount = number_format($row['amount'], 1);
+            $amount = floatval(str_replace(',', '', $row['amount'])); 
             $type = $row['type'];
 
             $total = $amount - $_SESSION['deduction'];
