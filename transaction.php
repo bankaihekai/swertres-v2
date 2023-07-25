@@ -70,13 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <link rel="stylesheet" href="css/style.css">
 </head>
-<style>
-  .sticky-header {
-    position: sticky;
-    top: 0; /* You can adjust this value based on your design and layout */
-    background-color: #f5f5f5; /* Customize the background color as needed */
-  }
-</style>
 <body>
     <div class="overlay position-fixed">
         <div class="overlay-content shadow-sm">
