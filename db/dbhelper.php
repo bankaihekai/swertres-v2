@@ -110,6 +110,7 @@ function deduction()
 
 function inputSwertres($swertres_number, $straight_amount, $ramble_amount)
 {
+    $final_combination = array(); // Initialize $final_combination as an empty array
     // if ramble amount have values--------------------------------
     if ($ramble_amount != null) {
 
